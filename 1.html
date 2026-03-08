@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>IX-H · Ghibli Class</title>
+    <!-- Font modern & elegan -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Quicksand', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #e0f0f5;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            backdrop-filter: blur(2px);
+            transition: background-image 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0;
+            color: #1e2b2f;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .app-container {
+            max-width: 1440px;
+            width: 100%;
+            position: relative;
+            z-index: 5;
+            padding: 1rem 2rem 3rem;
+        }
+
+        /* Efek scroll fade - terus menerus */
+        .fade-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-scroll.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Logo di pojok kiri atas */
+        .site-logo {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(8px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #043f50;
+            border: 2px solid white;
+            box-shadow: 0 4px 15px rgba(0,30,40,0.2);
+            z-index: 2000;
+            cursor: pointer;
+        }
+        .site-logo i {
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            margin-left: 70px;
+            position: relative;
+            z-index: 100;
+        }
+
+        .hamburger {
+            font-size: 2rem;
+            color: #05455c;
+            background: rgba(255,255,240,0.5);
+            backdrop-filter: blur(8px);
+            width: 60px;
+            height: 60px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: 0 6px 16px rgba(0,30,40,0.1);
+            transition: 0.2s;
+        }
+        .hamburger:hover {
+            background: white;
+        }
+
+        .bg-control {
+            display: flex;
+            gap: 10px;
+            background: rgba(255,255,255,0.4);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1.2rem;
+            border-radius: 60px;
+            align-items: center;
+        }
+        .bg-control input[type="file"] {
+            background: white;
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            width: 220px;
+            font-size: 0.9rem;
+        }
+        .bg-control button {
+            background: #0a4355;
+            border: none;
+            color: white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .menu-drawer {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 300px;
+            height: 100vh;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(24px);
+            border-right: 1px solid rgba(255,250,240,0.6);
+            padding: 2rem 1.5rem;
+            transition: left 0.3s ease;
+            z-index: 1000;
+            box-shadow: 8px 0 30px -10px #01262e;
+        }
+        .menu-drawer.open {
+            left: 0;
+        }
+        .menu-close {
+            text-align: right;
+            font-size: 2rem;
+            cursor: pointer;
+            margin-bottom: 2rem;
+            color: #033946;
+        }
+        .menu-item {
+            padding: 1rem 1.2rem;
+            margin: 0.5rem 0;
+            border-radius: 40px;
+            background: rgba(255,255,255,0.3);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #033946;
+            cursor: pointer;
+            transition: 0.15s;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .menu-item:hover {
+            background: white;
+        }
+        .menu-item i {
+            width: 30px;
+            font-size: 1.3rem;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.1);
+            backdrop-filter: blur(2px);
+            z-index: 999;
+            display: none;
+        }
+        .overlay.show {
+            display: block;
+        }
+
+        /* LOGIN MODAL */
+        .login-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(30px);
+            padding: 2.5rem 2rem;
+            border-radius: 3rem;
+            width: 90%;
+            max-width: 380px;
+            box-shadow: 0 40px 60px -20px #022b34;
+            border: 1px solid rgba(255,255,240,0.6);
+            z-index: 2000;
+            text-align: center;
+        }
+        .login-modal.hidden {
+            display: none;
+        }
+        .login-modal h2 {
+            margin-bottom: 1.5rem;
+            color: #043f50;
+        }
+        .login-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+        .login-tab {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.5);
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid #adcfdb;
+        }
+        .login-tab.active {
+            background: #04495e;
+            color: white;
+        }
+        .login-field {
+            margin: 1rem 0;
+            text-align: left;
+        }
+        .login-field label {
+            display: block;
+            margin-bottom: 0.3rem;
+            color: #025067;
+        }
+        .login-field input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 60px;
+            border: 1px solid #adcfdb;
+            background: white;
+        }
+        .login-btn {
+            background: #105f74;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 60px;
+            font-weight: 700;
+            width: 100%;
+            margin-top: 1rem;
+            cursor: pointer;
+        }
+
+        .dashboard {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(14px) saturate(180%);
+            border-radius: 2.5rem;
+            padding: 2rem 2.2rem;
+            box-shadow: 0 20px 40px -10px rgba(0, 20, 30, 0.2);
+            border: 1px solid rgba(255,245,235,0.5);
+            min-height: 70vh;
+        }
+
+        .panel {
+            display: none;
+        }
+        .panel.active-panel {
+            display: block;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #025067;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        /* Rating Kelas */
+        .rating-container {
+            background: rgba(255,255,255,0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 2rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stars {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            font-size: 2rem;
+            color: #ffc107;
+            cursor: pointer;
+        }
+        .stars i {
+            transition: 0.2s;
+        }
+        .stars i:hover {
+            transform: scale(1.2);
+        }
+        .rating-average {
+            text-align: center;
+            margin-top: 1rem;
+            font-weight: 600;
+            color: #043f50;
+        }
+
+        .dashboard-menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .menu-card {
+            background: rgba(255,255,255,0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 2rem;
+            padding: 2rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+        .menu-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.7);
+        }
+        .menu-card i {
+            font-size: 2.5rem;
+            color: #043f50;
+            margin-bottom: 1rem;
+        }
+        .menu-card h3 {
+            font-weight: 600;
+            color: #033946;
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 2rem;
+            padding: 1.5rem 2.5rem;
+            text-align: center;
+            min-width: 180px;
+        }
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1;
+            color: #033946;
+        }
+        .stat-label {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        .admin-number-control {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+        .admin-number-control input {
+            width: 80px;
+            padding: 0.3rem;
+            border-radius: 30px;
+            border: 1px solid #bcd8e3;
+            text-align: center;
+        }
+
+        .album-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .album-item {
+            aspect-ratio: 1/1;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            border: 2px solid white;
+            position: relative;
+        }
+        .album-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .delete-album {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(170,62,62,0.8);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .grid-card {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .person-card {
+            background: rgba(255,255,255,0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 1.8rem;
+            padding: 1rem 0.5rem;
+            text-align: center;
+            position: relative;
+        }
+        .person-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+            margin-bottom: 0.7rem;
+        }
+        .delete-person {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(170,62,62,0.8);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .admin-toolbar {
+            background: rgba(255,255,245,0.4);
+            backdrop-filter: blur(6px);
+            border-radius: 40px;
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 1rem 0;
+        }
+        .admin-toolbar input, .admin-toolbar button {
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            border: none;
+            background: white;
+        }
+        .admin-toolbar button {
+            background: #0a4152;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .picket-list {
+            background: rgba(255,255,255,0.3);
+            border-radius: 1.8rem;
+            padding: 1rem;
+        }
+        .picket-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.7rem;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .delete-piket {
+            background: rgba(170,62,62,0.8);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* Musik dari file */
+        .music-player {
+            background: rgba(255,255,255,0.4);
+            border-radius: 2rem;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .music-file-input {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 40px;
+            border: 1px solid #b0d3e0;
+            background: white;
+            margin-bottom: 1rem;
+        }
+        .music-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .music-item {
+            background: rgba(255,255,255,0.5);
+            border-radius: 2rem;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+        }
+        .music-item audio {
+            flex: 1;
+        }
+        .delete-music {
+            background: #aa3e3e;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* Live Chat di Dashboard */
+        .dashboard-chat {
+            margin-top: 2rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2rem;
+            padding: 1.5rem;
+        }
+        .chat-msgs {
+            background: rgba(255,255,255,0.3);
+            padding: 1rem;
+            border-radius: 1.5rem;
+            height: 250px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+        .msg-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            padding: 0.3rem 0.5rem;
+            border-radius: 40px;
+            background: rgba(255,255,255,0.2);
+        }
+        .msg-content {
+            word-break: break-word;
+        }
+        .delete-msg {
+            background: none;
+            border: none;
+            color: #aa3e3e;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+        .chat-input {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 0.8rem 1.2rem;
+            border-radius: 60px;
+            border: none;
+        }
+        .chat-input button {
+            background: #0b4757;
+            color: white;
+            padding: 0 2rem;
+            border-radius: 60px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        @media (max-width: 700px) {
+            .app-container { padding: 0.8rem; }
+            .album-grid { grid-template-columns: repeat(2,1fr); }
+            .dashboard-menu-grid { grid-template-columns: 1fr 1fr; }
+            .top-bar { margin-left: 50px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo di pojok kiri atas -->
+    <div class="site-logo" id="logoHome">
+        <i class="fa-regular fa-pagelines"></i>
+    </div>
+
+    <!-- MENU DRAWER -->
+    <div class="menu-drawer" id="menuDrawer">
+        <div class="menu-close" id="closeMenu"><i class="fa-regular fa-circle-xmark"></i></div>
+        <div class="menu-item" data-panel="dashboardMain"><i class="fa-regular fa-compass"></i> Dashboard</div>
+        <div class="menu-item" data-panel="strukturPanel"><i class="fa-regular fa-building"></i> Struktur</div>
+        <div class="menu-item" data-panel="albumPanel"><i class="fa-regular fa-images"></i> Album</div>
+        <div class="menu-item" data-panel="piketPanel"><i class="fa-regular fa-calendar"></i> Piket</div>
+        <div class="menu-item" data-panel="anggotaPanel"><i class="fa-regular fa-user"></i> Anggota</div>
+        <div class="menu-item" data-panel="musikPanel"><i class="fa-regular fa-music"></i> Musik</div>
+        <div style="margin-top:2rem; border-top:1px solid rgba(0,0,0,0.1); padding-top:1rem;">
+            <div class="menu-item" id="logoutBtn"><i class="fa-regular fa-arrow-right-from-bracket"></i> Keluar</div>
+        </div>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <!-- LOGIN MODAL -->
+    <div class="login-modal" id="loginModal">
+        <h2><i class="fa-regular fa-pagelines"></i> IX-H · Ghibli</h2>
+        <div class="login-tabs">
+            <div class="login-tab active" id="tabGuest">Tamu</div>
+            <div class="login-tab" id="tabAdmin">Admin</div>
+        </div>
+        
+        <div id="guestFields">
+            <div class="login-field">
+                <label>Nama Kamu</label>
+                <input type="text" id="guestName" placeholder="Masukkan nama" value="">
+            </div>
+        </div>
+
+        <div id="adminFields" style="display: none;">
+            <div class="login-field">
+                <label>Password Admin</label>
+                <input type="password" id="adminPass" placeholder="password">
+            </div>
+        </div>
+
+        <button class="login-btn" id="loginBtn">Masuk</button>
+    </div>
+
+    <!-- KONTEN UTAMA -->
+    <div class="app-container" id="mainApp" style="display: none;">
+        <div class="top-bar">
+            <div class="hamburger" id="hamburgerBtn">
+                <i class="fa-regular fa-bars"></i>
+            </div>
+            <!-- Kontrol background hanya untuk admin -->
+            <div class="bg-control" id="bgControl" style="display: none;">
+                <input type="file" id="bgFileInput" accept="image/*">
+                <button id="gantiBgBtn"><i class="fa-regular fa-image"></i> Ganti Background</button>
+            </div>
+        </div>
+
+        <div class="dashboard">
+            <!-- DASHBOARD UTAMA (dengan live chat) -->
+            <div id="dashboardMain" class="panel active-panel">
+                <div class="rating-container fade-scroll">
+                    <h3 style="text-align:center; margin-bottom:1rem;">Rating Kelas IX-H</h3>
+                    <div class="stars" id="starRating">
+                        <i class="fa-regular fa-star" data-rating="1"></i>
+                        <i class="fa-regular fa-star" data-rating="2"></i>
+                        <i class="fa-regular fa-star" data-rating="3"></i>
+                        <i class="fa-regular fa-star" data-rating="4"></i>
+                        <i class="fa-regular fa-star" data-rating="5"></i>
+                    </div>
+                    <div class="rating-average" id="ratingDisplay">Rata-rata: 0 (0 suara)</div>
+                </div>
+
+                <div class="stats-container fade-scroll">
+                    <div class="stat-card">
+                        <div class="stat-number" id="studentCountDisplay">32</div>
+                        <div class="stat-label">Jumlah Siswa</div>
+                        <div class="admin-number-control" id="adminStudentControl" style="display: none;">
+                            <input type="number" id="setStudentCount" min="1" value="32">
+                            <button id="updateStudentCountBtn"><i class="fa-regular fa-check"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Menu cepat di dashboard -->
+                <div class="dashboard-menu-grid fade-scroll">
+                    <div class="menu-card" data-panel="albumPanel">
+                        <i class="fa-regular fa-images"></i>
+                        <h3>Album</h3>
+                    </div>
+                    <div class="menu-card" data-panel="strukturPanel">
+                        <i class="fa-regular fa-building"></i>
+                        <h3>Struktur</h3>
+                    </div>
+                    <div class="menu-card" data-panel="musikPanel">
+                        <i class="fa-regular fa-music"></i>
+                        <h3>Musik</h3>
+                    </div>
+                </div>
+
+                <div class="dashboard-album fade-scroll">
+                    <h3 style="margin-bottom:1rem; color:#043f50;"><i class="fa-regular fa-images"></i> Album Foto</h3>
+                    <div class="album-grid" id="dashboardAlbumContainer"></div>
+                    <div class="empty-state" id="dashboardAlbumEmpty">Belum ada foto di album</div>
+                </div>
+
+                <!-- LIVE CHAT DI DASHBOARD -->
+                <div class="dashboard-chat fade-scroll">
+                    <h3 style="margin-bottom:1rem; color:#043f50;"><i class="fa-regular fa-comment"></i> Live Chat</h3>
+                    <div class="chat-msgs" id="chatMessages"></div>
+                    <div class="chat-input">
+                        <input type="text" id="chatInput" placeholder="Ketik pesan...">
+                        <button id="sendChatBtn">Kirim</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL STRUKTUR -->
+            <div id="strukturPanel" class="panel">
+                <div class="admin-toolbar" id="strukturAdminBar" style="display: none;">
+                    <input type="text" id="strukturNama" placeholder="Nama">
+                    <input type="text" id="strukturJabatan" placeholder="Jabatan">
+                    <input type="file" id="strukturFoto" accept="image/*">
+                    <button id="tambahStruktur"><i class="fa-regular fa-plus"></i> Tambah</button>
+                </div>
+                <div class="grid-card" id="strukturContainer"></div>
+                <div class="empty-state" id="strukturEmpty">Belum ada struktur</div>
+            </div>
+
+            <!-- PANEL ALBUM -->
+            <div id="albumPanel" class="panel">
+                <div class="admin-toolbar" id="albumAdminBar" style="display: none;">
+                    <input type="file" id="tambahAlbumFoto" accept="image/*" multiple>
+                    <button id="tambahAlbumBtn"><i class="fa-regular fa-image"></i> Tambah ke album</button>
+                </div>
+                <div class="album-grid" id="albumContainer"></div>
+                <div class="empty-state" id="albumEmpty">Album masih kosong</div>
+            </div>
+
+            <!-- PANEL PIKET -->
+            <div id="piketPanel" class="panel">
+                <div class="admin-toolbar" id="piketAdminBar" style="display: none;">
+                    <input type="text" id="piketHari" placeholder="Hari (Senin)">
+                    <input type="text" id="piketNama" placeholder="Nama petugas">
+                    <button id="tambahPiket"><i class="fa-regular fa-clock"></i> Tambah</button>
+                </div>
+                <div class="picket-list" id="piketContainer"></div>
+                <div class="empty-state" id="piketEmpty">Jadwal piket kosong</div>
+            </div>
+
+            <!-- PANEL ANGGOTA -->
+            <div id="anggotaPanel" class="panel">
+                <div class="admin-toolbar" id="anggotaAdminBar" style="display: none;">
+                    <input type="text" id="anggotaNama" placeholder="Nama siswa">
+                    <input type="file" id="anggotaFoto" accept="image/*">
+                    <button id="tambahAnggota"><i class="fa-regular fa-user-plus"></i> Tambah</button>
+                </div>
+                <div class="grid-card" id="anggotaContainer"></div>
+                <div class="empty-state" id="anggotaEmpty">Belum ada anggota</div>
+            </div>
+
+            <!-- PANEL MUSIK -->
+            <div id="musikPanel" class="panel">
+                <div class="music-player">
+                    <h3><i class="fa-regular fa-music"></i> Playlist Kelas</h3>
+                    <div class="admin-toolbar" id="musikAdminBar" style="display: none;">
+                        <input type="file" id="musicFileInput" accept="audio/*" multiple class="music-file-input">
+                        <button id="addMusicBtn"><i class="fa-regular fa-plus"></i> Tambah Musik</button>
+                    </div>
+                    <div class="music-list" id="musicList"></div>
+                    <div class="empty-state" id="musicEmpty">Belum ada musik</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // Fungsi kompresi gambar
+            function compressImage(file, maxWidth = 800, maxHeight = 800, quality = 0.7) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = (e) => {
+                        const img = new Image();
+                        img.src = e.target.result;
+                        img.onload = () => {
+                            let width = img.width;
+                            let height = img.height;
+                            if (width > height) {
+                                if (width > maxWidth) {
+                                    height *= maxWidth / width;
+                                    width = maxWidth;
+                                }
+                            } else {
+                                if (height > maxHeight) {
+                                    width *= maxHeight / height;
+                                    height = maxHeight;
+                                }
+                            }
+                            const canvas = document.createElement('canvas');
+                            canvas.width = width;
+                            canvas.height = height;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, width, height);
+                            canvas.toBlob((blob) => {
+                                const readerBlob = new FileReader();
+                                readerBlob.readAsDataURL(blob);
+                                readerBlob.onload = () => resolve(readerBlob.result);
+                            }, 'image/jpeg', quality);
+                        };
+                    };
+                });
+            }
+
+            // STATE
+            let isAdmin = false;
+            let loggedIn = false;
+            let currentUser = 'Tamu';
+            
+            // Data storage - pastikan selalu membaca dari localStorage
+            function loadData() {
+                strukturData = JSON.parse(localStorage.getItem('strukturData')) || [];
+                anggotaData = JSON.parse(localStorage.getItem('anggotaData')) || [];
+                albumData = JSON.parse(localStorage.getItem('albumData')) || [];
+                piketData = JSON.parse(localStorage.getItem('piketData')) || [];
+                musicList = JSON.parse(localStorage.getItem('musicList')) || [];
+                chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [
+                    { sender: "System", msg: "Selamat datang di chat kelas" }
+                ];
+                studentCount = parseInt(localStorage.getItem('studentCount')) || 32;
+                savedBackground = localStorage.getItem('classBackground') || '';
+                ratings = JSON.parse(localStorage.getItem('classRatings')) || [];
+            }
+
+            // Panggil loadData setiap kali diperlukan
+            let strukturData, anggotaData, albumData, piketData, musicList, chatHistory, studentCount, savedBackground, ratings;
+            loadData(); // initial load
+            
+            // DOM Elements
+            const loginModal = document.getElementById('loginModal');
+            const mainApp = document.getElementById('mainApp');
+            const tabGuest = document.getElementById('tabGuest');
+            const tabAdmin = document.getElementById('tabAdmin');
+            const guestFields = document.getElementById('guestFields');
+            const adminFields = document.getElementById('adminFields');
+            const guestName = document.getElementById('guestName');
+            const adminPass = document.getElementById('adminPass');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            const hamburger = document.getElementById('hamburgerBtn');
+            const menuDrawer = document.getElementById('menuDrawer');
+            const overlay = document.getElementById('overlay');
+            const closeMenu = document.getElementById('closeMenu');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const bgControl = document.getElementById('bgControl');
+            const bgFile = document.getElementById('bgFileInput');
+            const gantiBg = document.getElementById('gantiBgBtn');
+            const logoHome = document.getElementById('logoHome');
+            const menuItems = document.querySelectorAll('.menu-item[data-panel]');
+            const menuCards = document.querySelectorAll('.menu-card[data-panel]');
+            const panels = document.querySelectorAll('.panel');
+
+            // Dashboard elements
+            const studentCountDisplay = document.getElementById('studentCountDisplay');
+            const setStudentCount = document.getElementById('setStudentCount');
+            const updateStudentCountBtn = document.getElementById('updateStudentCountBtn');
+            const adminStudentControl = document.getElementById('adminStudentControl');
+            const dashboardAlbumContainer = document.getElementById('dashboardAlbumContainer');
+            const dashboardAlbumEmpty = document.getElementById('dashboardAlbumEmpty');
+
+            // Admin toolbars
+            const strukturAdminBar = document.getElementById('strukturAdminBar');
+            const albumAdminBar = document.getElementById('albumAdminBar');
+            const piketAdminBar = document.getElementById('piketAdminBar');
+            const anggotaAdminBar = document.getElementById('anggotaAdminBar');
+            const musikAdminBar = document.getElementById('musikAdminBar');
+
+            // Rating elements
+            const stars = document.querySelectorAll('#starRating i');
+            const ratingDisplay = document.getElementById('ratingDisplay');
+
+            // Music elements
+            const musicFileInput = document.getElementById('musicFileInput');
+            const addMusicBtn = document.getElementById('addMusicBtn');
+            const musicListContainer = document.getElementById('musicList');
+            const musicEmpty = document.getElementById('musicEmpty');
+
+            // Chat elements
+            const chatMessages = document.getElementById('chatMessages');
+            const chatInput = document.getElementById('chatInput');
+            const sendChatBtn = document.getElementById('sendChatBtn');
+
+            // Load background yang tersimpan
+            if (savedBackground) {
+                document.body.style.backgroundImage = `url('${savedBackground}')`;
+            }
+
+            // Logo home - kembali ke dashboard
+            logoHome.addEventListener('click', () => {
+                panels.forEach(p => p.classList.remove('active-panel'));
+                document.getElementById('dashboardMain').classList.add('active-panel');
+            });
+
+            // ---- LOGIN TABS ----
+            tabGuest.addEventListener('click', () => {
+                tabGuest.classList.add('active');
+                tabAdmin.classList.remove('active');
+                guestFields.style.display = 'block';
+                adminFields.style.display = 'none';
+            });
+
+            tabAdmin.addEventListener('click', () => {
+                tabAdmin.classList.add('active');
+                tabGuest.classList.remove('active');
+                guestFields.style.display = 'none';
+                adminFields.style.display = 'block';
+            });
+
+            // LOGIN BUTTON
+            loginBtn.addEventListener('click', () => {
+                if (tabAdmin.classList.contains('active')) {
+                    // Admin login
+                    const pass = adminPass.value;
+                    if (pass === 'zanndev') {
+                        isAdmin = true;
+                        currentUser = 'Admin';
+                        loggedIn = true;
+                        loginModal.classList.add('hidden');
+                        mainApp.style.display = 'block';
+                        showAdminControls(true);
+                        loadData(); // refresh data
+                        updateUI();
+                    } else {
+                        alert('Password salah!');
+                    }
+                } else {
+                    // Guest login
+                    const name = guestName.value.trim() || 'Tamu';
+                    isAdmin = false;
+                    currentUser = name;
+                    loggedIn = true;
+                    loginModal.classList.add('hidden');
+                    mainApp.style.display = 'block';
+                    showAdminControls(false);
+                    loadData(); // refresh data
+                    updateUI();
+                }
+            });
+
+            function showAdminControls(show) {
+                if (bgControl) bgControl.style.display = show ? 'flex' : 'none';
+                
+                const style = show ? 'flex' : 'none';
+                if (strukturAdminBar) strukturAdminBar.style.display = style;
+                if (albumAdminBar) albumAdminBar.style.display = style;
+                if (piketAdminBar) piketAdminBar.style.display = style;
+                if (anggotaAdminBar) anggotaAdminBar.style.display = style;
+                if (musikAdminBar) musikAdminBar.style.display = style;
+                if (adminStudentControl) adminStudentControl.style.display = show ? 'flex' : 'none';
+            }
+
+            // logout
+            logoutBtn.addEventListener('click', () => {
+                loggedIn = false;
+                mainApp.style.display = 'none';
+                loginModal.classList.remove('hidden');
+                adminPass.value = '';
+                guestName.value = '';
+                tabGuest.classList.add('active');
+                tabAdmin.classList.remove('active');
+                guestFields.style.display = 'block';
+                adminFields.style.display = 'none';
+                menuDrawer.classList.remove('open');
+                overlay.classList.remove('show');
+            });
+
+            // hamburger menu
+            hamburger.addEventListener('click', () => {
+                menuDrawer.classList.add('open');
+                overlay.classList.add('show');
+            });
+            closeMenu.addEventListener('click', closeDrawer);
+            overlay.addEventListener('click', closeDrawer);
+            function closeDrawer() {
+                menuDrawer.classList.remove('open');
+                overlay.classList.remove('show');
+            }
+
+            // pindah panel via menu
+            menuItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const targetId = item.dataset.panel;
+                    if (targetId) {
+                        panels.forEach(p => p.classList.remove('active-panel'));
+                        document.getElementById(targetId).classList.add('active-panel');
+                        closeDrawer();
+                    }
+                });
+            });
+
+            // pindah panel via menu cards di dashboard
+            menuCards.forEach(card => {
+                card.addEventListener('click', (e) => {
+                    const targetId = card.dataset.panel;
+                    if (targetId) {
+                        panels.forEach(p => p.classList.remove('active-panel'));
+                        document.getElementById(targetId).classList.add('active-panel');
+                    }
+                });
+            });
+
+            // GANTI BACKGROUND
+            gantiBg.addEventListener('click', () => {
+                if (!isAdmin) { alert('Hanya admin yang bisa mengganti background'); return; }
+                if (bgFile.files.length > 0) {
+                    const file = bgFile.files[0];
+                    compressImage(file, 1920, 1080, 0.8).then(bgData => {
+                        document.body.style.backgroundImage = `url('${bgData}')`;
+                        localStorage.setItem('classBackground', bgData);
+                        savedBackground = bgData;
+                    });
+                } else {
+                    alert('Pilih file gambar terlebih dahulu.');
+                }
+            });
+
+            // UPDATE JUMLAH SISWA
+            updateStudentCountBtn.addEventListener('click', () => {
+                if (!isAdmin) return alert('Hanya admin');
+                const newVal = parseInt(setStudentCount.value);
+                if (newVal > 0) {
+                    studentCount = newVal;
+                    studentCountDisplay.innerText = studentCount;
+                    localStorage.setItem('studentCount', studentCount);
+                }
+            });
+
+            // RATING SYSTEM
+            function renderRating() {
+                if (ratings.length === 0) {
+                    ratingDisplay.innerText = 'Belum ada rating';
+                    return;
+                }
+                const total = ratings.reduce((a, b) => a + b, 0);
+                const avg = (total / ratings.length).toFixed(1);
+                ratingDisplay.innerText = `Rata-rata: ${avg} (${ratings.length} suara)`;
+                
+                const solidCount = Math.round(avg);
+                stars.forEach((star, index) => {
+                    if (index < solidCount) {
+                        star.className = 'fa-solid fa-star';
+                    } else {
+                        star.className = 'fa-regular fa-star';
+                    }
+                });
+            }
+
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const rating = parseInt(star.dataset.rating);
+                    ratings.push(rating);
+                    localStorage.setItem('classRatings', JSON.stringify(ratings));
+                    renderRating();
+                });
+            });
+
+            // MUSIC PLAYER
+            function renderMusic() {
+                musicListContainer.innerHTML = '';
+                if (musicList.length === 0) {
+                    musicEmpty.style.display = 'block';
+                } else {
+                    musicEmpty.style.display = 'none';
+                    musicList.forEach((track, index) => {
+                        const div = document.createElement('div');
+                        div.className = 'music-item';
+                        div.innerHTML = `
+                            <audio controls src="${track.dataURL}"></audio>
+                            ${isAdmin ? '<button class="delete-music" data-index="'+index+'"><i class="fa-regular fa-trash-can"></i></button>' : ''}
+                        `;
+                        musicListContainer.appendChild(div);
+                    });
+                    
+                    if (isAdmin) {
+                        document.querySelectorAll('.delete-music').forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                const index = e.target.closest('button').dataset.index;
+                                musicList.splice(index, 1);
+                                localStorage.setItem('musicList', JSON.stringify(musicList));
+                                renderMusic();
+                            });
+                        });
+                    }
+                }
+            }
+
+            // LIVE CHAT
+            function renderChat() {
+                chatMessages.innerHTML = '';
+                chatHistory.forEach((msg, index) => {
+                    const msgDiv = document.createElement('div');
+                    msgDiv.className = 'msg-item';
+                    msgDiv.innerHTML = `
+                        <div class="msg-content"><strong>${msg.sender}</strong>: ${msg.msg}</div>
+                        ${isAdmin ? '<button class="delete-msg" data-index="'+index+'"><i class="fa-regular fa-trash-can"></i></button>' : ''}
+                    `;
+                    chatMessages.appendChild(msgDiv);
+                });
+
+                if (isAdmin) {
+                    document.querySelectorAll('.delete-msg').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            const index = e.target.closest('button').dataset.index;
+                            chatHistory.splice(index, 1);
+                            localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+                            renderChat();
+                        });
+                    });
+                }
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            sendChatBtn.addEventListener('click', () => {
+                const msg = chatInput.value.trim();
+                if (msg) {
+                    chatHistory.push({ sender: currentUser, msg: msg });
+                    localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+                    renderChat();
+                    chatInput.value = '';
+                }
+            });
+
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendChatBtn.click();
+                }
+            });
+
+            // Efek scroll reveal (terus menerus)
+            function setupScrollReveal() {
+                const fadeElements = document.querySelectorAll('.fade-scroll');
+                
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('revealed');
+                        } else {
+                            entry.target.classList.remove('revealed');
+                        }
+                    });
+                }, { threshold: 0.1, rootMargin: '0px' });
+                
+                fadeElements.forEach(el => observer.observe(el));
+            }
+
+            // UPDATE UI (render semua komponen)
+            function updateUI() {
+                studentCountDisplay.innerText = studentCount;
+                setStudentCount.value = studentCount;
+                renderRating();
+                renderStruktur();
+                renderAnggota();
+                renderAlbum();
+                renderPiket();
+                renderChat();
+                renderDashboardAlbum();
+                renderMusic();
+                setTimeout(setupScrollReveal, 100);
+            }
+
+            // RENDER FUNCTIONS
+            function renderStruktur() {
+                const container = document.getElementById('strukturContainer');
+                const empty = document.getElementById('strukturEmpty');
+                container.innerHTML = '';
+                if (strukturData.length === 0) {
+                    empty.style.display = 'block';
+                } else {
+                    empty.style.display = 'none';
+                    strukturData.forEach((p, index) => {
+                        const card = document.createElement('div');
+                        card.className = 'person-card';
+                        card.innerHTML = `
+                            <img src="${p.foto}" class="person-img">
+                            <div class="person-name">${p.nama}</div>
+                            <div class="person-role">${p.jabatan}</div>
+                            ${isAdmin ? '<button class="delete-person" data-index="'+index+'" data-type="struktur"><i class="fa-regular fa-trash-can"></i></button>' : ''}
+                        `;
+                        container.appendChild(card);
+                    });
+                }
+            }
+
+            function renderAnggota() {
+                const container = document.getElementById('anggotaContainer');
+                const empty = document.getElementById('anggotaEmpty');
+                container.innerHTML = '';
+                if (anggotaData.length === 0) {
+                    empty.style.display = 'block';
+                } else {
+                    empty.style.display = 'none';
+                    anggotaData.forEach((p, index) => {
+                        const card = document.createElement('div');
+                        card.className = 'person-card';
+                        card.innerHTML = `
+                            <img src="${p.foto}" class="person-img">
+                            <div class="person-name">${p.nama}</div>
+                            ${isAdmin ? '<button class="delete-person" data-index="'+index+'" data-type="anggota"><i class="fa-regular fa-trash-can"></i></button>' : ''}
+                        `;
+                        container.appendChild(card);
+                    });
+                }
+            }
+
+            function renderAlbum() {
+                const container = document.getElementById('albumContainer');
+                const empty = document.getElementById('albumEmpty');
+                container.innerHTML = '';
+                if (albumData.length === 0) {
+                    empty.style.display = 'block';
+                } else {
+                    empty.style.display = 'none';
+                    albumData.forEach((img, index) => {
+                        const div = document.createElement('div');
+                        div.className = 'album-item';
+                        div.innerHTML = `
+                            <img src="${img.src}" alt="album">
+                            ${isAdmin ? '<button class="delete-album" data-index="'+index+'"><i class="fa-regular fa-trash-can"></i></button>' : ''}
+                        `;
+                        container.appendChild(div);
+                    });
+                }
+                renderDashboardAlbum();
+            }
+
+            function renderDashboardAlbum() {
+                dashboardAlbumContainer.innerHTML = '';
+                if (albumData.length === 0) {
+                    dashboardAlbumEmpty.style.display = 'block';
+                } else {
+                    dashboardAlbumEmpty.style.display = 'none';
+                    albumData.slice(0, 8).forEach(img => {
+                        const div = document.createElement('div');
+                        div.className = 'album-item';
+                        div.innerHTML = `<img src="${img.src}" alt="album">`;
+                        dashboardAlbumContainer.appendChild(div);
+                    });
+                }
+            }
+
+            function renderPiket() {
+                const container = document.getElementById('piketContainer');
+                const empty = document.getElementById('piketEmpty');
+                container.innerHTML = '';
+                if (piketData.length === 0) {
+                    empty.style.display = 'block';
+                } else {
+                    empty.style.display = 'none';
+                    piketData.forEach((p, index) => {
+                        const div = document.createElement('div');
+                        div.className = 'picket-item';
+                        div.innerHTML = `
+                            <span><strong>${p.hari}</strong>: ${p.petugas}</span>
+                            ${isAdmin ? '<button class="delete-piket" data-index="'+index+'"><i class="fa-regular fa-trash-can"></i></button>' : ''}
+                        `;
+                        container.appendChild(div);
+                    });
+                }
+            }
+
+            // ========== EVENT DELEGATION UNTUK SEMUA TOMBOL ==========
+            document.addEventListener('click', async function(e) {
+                // Tombol tambah struktur
+                if (e.target.id === 'tambahStruktur' || e.target.closest('#tambahStruktur')) {
+                    if (!isAdmin) { alert('Hanya admin yang bisa menambah'); return; }
+                    const nama = document.getElementById('strukturNama').value.trim() || 'Tanpa Nama';
+                    const jabatan = document.getElementById('strukturJabatan').value.trim() || 'Anggota';
+                    const file = document.getElementById('strukturFoto').files[0];
+                    if (file) {
+                        try {
+                            const compressed = await compressImage(file);
+                            strukturData.push({ nama, jabatan, foto: compressed });
+                            localStorage.setItem('strukturData', JSON.stringify(strukturData));
+                            renderStruktur();
+                            document.getElementById('strukturNama').value = '';
+                            document.getElementById('strukturJabatan').value = '';
+                            document.getElementById('strukturFoto').value = '';
+                        } catch (err) {
+                            alert('Gagal memproses gambar');
+                        }
+                    } else {
+                        strukturData.push({ nama, jabatan, foto: 'https://i.pravatar.cc/150?img='+Math.floor(Math.random()*40) });
+                        localStorage.setItem('strukturData', JSON.stringify(strukturData));
+                        renderStruktur();
+                    }
+                }
+
+                // Tombol tambah anggota
+                if (e.target.id === 'tambahAnggota' || e.target.closest('#tambahAnggota')) {
+                    if (!isAdmin) { alert('Hanya admin yang bisa menambah'); return; }
+                    const nama = document.getElementById('anggotaNama').value.trim() || 'Siswa';
+                    const file = document.getElementById('anggotaFoto').files[0];
+                    if (file) {
+                        try {
+                            const compressed = await compressImage(file);
+                            anggotaData.push({ nama, foto: compressed });
+                            localStorage.setItem('anggotaData', JSON.stringify(anggotaData));
+                            renderAnggota();
+                            document.getElementById('anggotaNama').value = '';
+                            document.getElementById('anggotaFoto').value = '';
+                        } catch (err) {
+                            alert('Gagal memproses gambar');
+                        }
+                    } else {
+                        anggotaData.push({ nama, foto: 'https://i.pravatar.cc/150?img='+Math.floor(Math.random()*40) });
+                        localStorage.setItem('anggotaData', JSON.stringify(anggotaData));
+                        renderAnggota();
+                    }
+                }
+
+                // Tombol tambah piket
+                if (e.target.id === 'tambahPiket' || e.target.closest('#tambahPiket')) {
+                    if (!isAdmin) { alert('Hanya admin yang bisa menambah'); return; }
+                    const hari = document.getElementById('piketHari').value.trim() || 'Hari';
+                    const petugas = document.getElementById('piketNama').value.trim() || 'Petugas';
+                    piketData.push({ hari, petugas });
+                    localStorage.setItem('piketData', JSON.stringify(piketData));
+                    renderPiket();
+                    document.getElementById('piketHari').value = '';
+                    document.getElementById('piketNama').value = '';
+                }
+
+                // Tombol tambah album
+                if (e.target.id === 'tambahAlbumBtn' || e.target.closest('#tambahAlbumBtn')) {
+                    if (!isAdmin) { alert('Hanya admin yang bisa menambah'); return; }
+                    const files = document.getElementById('tambahAlbumFoto').files;
+                    if (files.length > 0) {
+                        for (let file of files) {
+                            try {
+                                const compressed = await compressImage(file);
+                                albumData.push({ src: compressed });
+                            } catch (err) {
+                                alert('Gagal memproses gambar');
+                            }
+                        }
+                        localStorage.setItem('albumData', JSON.stringify(albumData));
+                        renderAlbum();
+                        document.getElementById('tambahAlbumFoto').value = '';
+                    } else {
+                        alert('Pilih file gambar terlebih dahulu');
+                    }
+                }
+
+                // Tombol tambah musik
+                if (e.target.id === 'addMusicBtn' || e.target.closest('#addMusicBtn')) {
+                    if (!isAdmin) { alert('Hanya admin yang bisa menambah'); return; }
+                    const files = musicFileInput.files;
+                    if (files.length > 0) {
+                        Array.from(files).forEach(file => {
+                            const reader = new FileReader();
+                            reader.onload = (ev) => {
+                                musicList.push({ name: file.name, dataURL: ev.target.result });
+                                localStorage.setItem('musicList', JSON.stringify(musicList));
+                                renderMusic();
+                            };
+                            reader.readAsDataURL(file);
+                        });
+                        musicFileInput.value = '';
+                    } else {
+                        alert('Pilih file musik terlebih dahulu');
+                    }
+                }
+
+                // Tombol hapus struktur/anggota (class delete-person)
+                if (e.target.closest('.delete-person')) {
+                    if (!isAdmin) return;
+                    const btn = e.target.closest('.delete-person');
+                    const type = btn.dataset.type;
+                    const index = btn.dataset.index;
+                    if (type === 'struktur') {
+                        strukturData.splice(index, 1);
+                        localStorage.setItem('strukturData', JSON.stringify(strukturData));
+                        renderStruktur();
+                    } else if (type === 'anggota') {
+                        anggotaData.splice(index, 1);
+                        localStorage.setItem('anggotaData', JSON.stringify(anggotaData));
+                        renderAnggota();
+                    }
+                }
+
+                // Tombol hapus album
+                if (e.target.closest('.delete-album')) {
+                    if (!isAdmin) return;
+                    const btn = e.target.closest('.delete-album');
+                    const index = btn.dataset.index;
+                    albumData.splice(index, 1);
+                    localStorage.setItem('albumData', JSON.stringify(albumData));
+                    renderAlbum();
+                }
+
+                // Tombol hapus piket
+                if (e.target.closest('.delete-piket')) {
+                    if (!isAdmin) return;
+                    const btn = e.target.closest('.delete-piket');
+                    const index = btn.dataset.index;
+                    piketData.splice(index, 1);
+                    localStorage.setItem('piketData', JSON.stringify(piketData));
+                    renderPiket();
+                }
+
+                // Tombol hapus musik (sudah ada di renderMusic, tapi kita tambahkan di sini untuk jaga)
+                if (e.target.closest('.delete-music')) {
+                    if (!isAdmin) return;
+                    const btn = e.target.closest('.delete-music');
+                    const index = btn.dataset.index;
+                    musicList.splice(index, 1);
+                    localStorage.setItem('musicList', JSON.stringify(musicList));
+                    renderMusic();
+                }
+            });
+
+            // Initial render (jika sudah login dari sebelumnya)
+            if (mainApp.style.display === 'block') {
+                updateUI();
+            }
+        })();
+    </script>
+</body>
+</html>
